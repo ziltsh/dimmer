@@ -3,22 +3,43 @@
 #
 
 # common install options
+INSTALL=/usr/bin/install
 IOPT='-p -v'
 
+default:
+	make -s usage
+.PHONY: default
+
+install: ~/bin/dimmer
+.PHONY: install
+uninstall:
+	-rm -v ~/bin/dimmer
+	-mv -v ~/.dimmerrc ~/.dimmerrc.old
+.PHONY: uninstall
+
 ~/bin/dimmer: ~/bin ~/.dimmerrc
-	 install dimmer.bash $@
+	 ${INSTALL} ${I_OPT} dimmer.bash $@
 
 ~/.dimmerrc: dimmerrc
-	install -m 600 dimmerrc $@
+	${INSTALL} ${I_OPT} -m 600 dimmerrc $@
 
 ~/bin:
-	install -d $@
+	${INSTALL} ${I_OPT} -d $@
 
-$@:
-.PHONY: $@
+#$@:
+#	printf "+ do nothing with %s\n" "$@"
+#.PHONY: $@
 
 report:
 	ls -l ~/.dimmerrc ~/bin/dimmer
 .PHONY: report
+
+usage:
+	printf "\n"
+	printf "  Usage: make [-s] {install|uninstall}\n"
+	printf "                   {report}\n"
+	printf "                   {default|usage}\n"
+	printf "\n"
+.PHONY: usage
 
 #.
