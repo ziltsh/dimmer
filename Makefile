@@ -4,26 +4,38 @@
 
 # common install options
 INSTALL=/usr/bin/install
-IOPT='-p -v'
+# install options
+#IOPT   = -p -v
+# install options with backup
+IOPT   = -p -v -b --suffix=bak`date '+%Y%m%d'`
+
+PKG     = dimmer-script
+DESTDIR = debian
+HOMEDIR = ${DESTDIR}${HOME}
+BIN_DIR = ${DESTDIR}${HOME}/bin
 
 default:
 	make -s usage
 .PHONY: default
 
-install: ~/bin/dimmer
-.PHONY: install
-uninstall:
-	-rm -v ~/bin/dimmer
-	-mv -v ~/.dimmerrc ~/.dimmerrc.old
-.PHONY: uninstall
+i: install
+install: ${BIN_DIR}/dimmer
+	make -s report
+.PHONY: i install
 
-~/bin/dimmer: ~/bin ~/.dimmerrc
+u: uninstall
+uninstall:
+	-rm -v ${BIN_DIR}/dimmer
+	-mv -v ${HOMEDIR}/.dimmerrc ${HOMEDIR}/.dimmerrc.uninstalled`date '+%Y%m%d'`
+.PHONY: u uninstall
+
+${BIN_DIR}/dimmer: ${BIN_DIR} ${HOMEDIR}/.dimmerrc
 	 ${INSTALL} ${I_OPT} dimmer.bash $@
 
-~/.dimmerrc: dimmerrc
+${HOMEDIR}/.dimmerrc: dimmerrc
 	${INSTALL} ${I_OPT} -m 600 dimmerrc $@
 
-~/bin:
+${BIN_DIR}:
 	${INSTALL} ${I_OPT} -d $@
 
 #$@:
@@ -31,7 +43,7 @@ uninstall:
 #.PHONY: $@
 
 report:
-	ls -l ~/.dimmerrc ~/bin/dimmer
+	ls -l ${HOMEDIR}/.dimmerrc ${BIN_DIR}/dimmer
 .PHONY: report
 
 usage:
