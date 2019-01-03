@@ -34,7 +34,7 @@ Log "setting brightness to $brightness and gamma to $gamma"
 
 # loop active monitors
 for M in $(GetActiveMonitors); do
-	xrandr --output $M --gamma 0.9:0.9:0.8 --brightness 0.9
+	xrandr --output $M --gamma $gamma --brightness $brightness
 done
 
 #.
