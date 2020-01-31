@@ -29,6 +29,12 @@ uninstall:
 	-mv -v ${HOMEDIR}/.dimmerrc ${HOMEDIR}/.dimmerrc.uninstalled`date '+%Y%m%d'`
 .PHONY: u uninstall
 
+d: diff
+diff:
+	diff -q dimmer.bash ${BIN_DIR}/dimmer
+	diff -q dimmerrc ${HOMEDIR}/.dimmerrc
+.PHONY: d diff
+
 ${BIN_DIR}/dimmer: ${BIN_DIR} ${HOMEDIR}/.dimmerrc
 	 ${INSTALL} ${I_OPT} dimmer.bash $@
 
